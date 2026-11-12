@@ -48,7 +48,7 @@ Description:
 Produce a tailored version. Rules:
 - NEVER invent employers, job titles, dates, degrees, certifications, skills,
   tools, metrics, team sizes or achievements.
-- Keep every job in the master resume. You may select and rephrase bullets.
+- Keep every job and project in the master resume. You may select and rephrase bullets.
 - Keep 3-5 of the most relevant bullets per role; preserve real metrics.
 - Re-order skills within categories by relevance. Only use skills that already
   appear in the master resume.
@@ -265,15 +265,16 @@ def validate_tailoring(master: dict, data: dict) -> tuple[dict, list[str]]:
     for project in master.get("projects") or []:
         name = str(project.get("name") or "")
         tailored = project_by_name.get(name.strip().lower())
-        if not tailored:
-            continue
         source_bullets = [
             str(b) for b in (project.get("bullets") or []) if str(b).strip()
         ]
         merged = dict(project)
-        merged["bullets"] = _clean_bullets(
-            tailored.get("bullets"), source_bullets, warnings, f"project/{name}"
-        )
+        if tailored:
+            merged["bullets"] = _clean_bullets(
+                tailored.get("bullets"), source_bullets, warnings, f"project/{name}"
+            )
+        else:
+            merged["bullets"] = source_bullets
         projects.append(merged)
     if not projects:
         projects = list(master.get("projects") or [])

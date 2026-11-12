@@ -239,7 +239,7 @@
       <div class="health" id="health"></div>
     </div>
     <div class="header-actions">
-      <button class="btn primary" id="runHint">Run discovery</button>
+      <button class="btn primary" id="runHint">Run search</button>
     </div>
   </section>
 
@@ -309,6 +309,7 @@
 const STATUSES = ["new","shortlisted","prepared","applied","interview","offer","rejected","ignored"];
 const STATUS_LABEL = {new:"New", shortlisted:"Shortlisted", prepared:"Prepared", applied:"Applied", interview:"Interview", offer:"Offer", rejected:"Rejected", ignored:"Ignored"};
 const state = { jobs: [], stats: {}, health: null, filter: { status: "", q: "", min_score: 0 }, selected: null, busy: false };
+let runPoll = null;
 const $ = (sel) => document.querySelector(sel);
 
 function esc(value) {
@@ -501,6 +502,45 @@ async function openJob(id) {
   }
 }
 
+async function runSearch() {
+  const btn = $("#runHint");
+  if (btn.disabled) return;
+  btn.disabled = true;
+  btn.textContent = "Starting...";
+  try {
+    const data = await api("/api/run", { method: "POST", body: JSON.stringify({}) });
+    btn.textContent = "Search running...";
+    toast(data.message || "Search started in a new console window.");
+    if (runPoll) clearInterval(runPoll);
+    runPoll = setInterval(async () => {
+      try {
+        const status = await api("/api/run/status");
+        if (status.running) return;
+        clearInterval(runPoll);
+        runPoll = null;
+        btn.disabled = false;
+        btn.textContent = "Run search";
+        await refreshAll();
+        if (status.exit_code === 0) {
+          toast("Search finished. New jobs are in the list.");
+        } else {
+          toast(`Search exited with code ${status.exit_code}. Check the console window.`, true);
+        }
+      } catch (err) {
+        clearInterval(runPoll);
+        runPoll = null;
+        btn.disabled = false;
+        btn.textContent = "Run search";
+        toast(err.message, true);
+      }
+    }, 4000);
+  } catch (err) {
+    btn.disabled = false;
+    btn.textContent = "Run search";
+    toast(err.message, true);
+  }
+}
+
 function fileLink(label, path) {
   if (!path) return "";
   return `<div class="doc"><div class="kind">${esc(label)}</div><a href="/files/${encodeURI(path)}" target="_blank" rel="noopener">${esc(path.split("/").pop())}</a></div>`;
@@ -636,7 +676,7 @@ async function saveNotes() {
 $("#refreshBtn").addEventListener("click", () => refreshAll(true));
 $("#guideBtn").addEventListener("click", () => $("#guideDialog").showModal());
 $("#closeGuide").addEventListener("click", () => $("#guideDialog").close());
-$("#runHint").addEventListener("click", () => $("#guideDialog").showModal());
+$("#runHint").addEventListener("click", runSearch);
 $("#closeDrawer").addEventListener("click", closeDrawer);
 $("#overlay").addEventListener("click", closeDrawer);
 document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeDrawer(); });

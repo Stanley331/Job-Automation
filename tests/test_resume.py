@@ -107,6 +107,34 @@ def test_projects_fall_back_to_master_when_none_are_tailored():
     assert tailored["projects"] == MASTER["projects"]
 
 
+def test_all_master_projects_are_kept_even_when_llm_omits_one():
+    master = dict(MASTER)
+    master["projects"] = MASTER["projects"] + [
+        {
+            "name": "Second Project",
+            "tech": "Python",
+            "bullets": ["Built a Python service."],
+        }
+    ]
+
+    tailored, _ = resume.validate_tailoring(
+        master,
+        {
+            "projects": [
+                {
+                    "name": "Order Service",
+                    "bullets": ["Implemented idempotent Kafka consumers."],
+                }
+            ]
+        },
+    )
+
+    assert [project["name"] for project in tailored["projects"]] == [
+        "Order Service",
+        "Second Project",
+    ]
+
+
 def test_invalid_tailoring_payload_uses_offline_selection():
     tailored, warnings = resume.validate_tailoring(MASTER, "not a dict")
 

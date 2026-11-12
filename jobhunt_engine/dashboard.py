@@ -231,6 +231,71 @@ def create_app(cfg: dict | None = None) -> FastAPI:
         finally:
             conn.close()
 
+    run_state: dict = {"proc": None}
+
+    @app.post("/api/run")
+    def api_run(payload: Annotated[dict | None, Body()] = None):
+        """Start a discovery + scoring run in its own console window."""
+        proc = run_state.get("proc")
+        if proc is not None and proc.poll() is None:
+            raise HTTPException(
+                status_code=409,
+                detail="A search is already running. Check the console window it opened.",
+            )
+
+        payload = payload or {}
+        cmd = [sys.executable, "-m", "jobhunt_engine.cli", "run"]
+        limit = payload.get("limit")
+        if limit:
+            try:
+                cmd += ["--limit", str(int(limit))]
+            except (TypeError, ValueError):
+                raise HTTPException(status_code=400, detail="limit must be a number")
+        prepare_top = payload.get("prepare_top")
+        if prepare_top:
+            try:
+                cmd += ["--prepare-top", str(int(prepare_top))]
+            except (TypeError, ValueError):
+                raise HTTPException(
+                    status_code=400, detail="prepare_top must be a number"
+                )
+        if payload.get("rescore"):
+            cmd.append("--rescore")
+
+        kwargs: dict = {"cwd": str(ROOT)}
+        if os.name == "nt":
+            kwargs["creationflags"] = subprocess.CREATE_NEW_CONSOLE
+        else:
+            kwargs["start_new_session"] = True
+        try:
+            proc = subprocess.Popen(cmd, **kwargs)
+        except OSError as exc:
+            raise HTTPException(
+                status_code=500, detail=f"Could not start the search: {exc}"
+            ) from exc
+
+        run_state["proc"] = proc
+        return {
+            "ok": True,
+            "pid": proc.pid,
+            "message": (
+                "Search started in a new console window. It searches the boards, "
+                "scores new jobs and writes the report. This page refreshes when it finishes."
+            ),
+        }
+
+    @app.get("/api/run/status")
+    def api_run_status():
+        proc = run_state.get("proc")
+        if proc is None:
+            return {"running": False, "started": False}
+        code = proc.poll()
+        return {
+            "running": code is None,
+            "started": True,
+            "exit_code": code,
+        }
+
     @app.get("/api/answer-bank")
     def api_answer_bank():
         from .config import load_answer_bank

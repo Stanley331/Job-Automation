@@ -141,6 +141,7 @@ Opens <http://127.0.0.1:8765>. You can:
 - See the score reason, red flags and salary fit.
 - Change status with the dropdown (`new -> shortlisted -> prepared -> applied -> interview -> offer / rejected / ignored`).
 - Open a job and prepare the application package.
+- Click **Run search** to start discovery + scoring in a new console window. The button shows progress and the list refreshes when the run finishes.
 
 ### Step 3 — Prepare a tailored application
 
@@ -260,14 +261,21 @@ The dashboard's **Applied** card counts applied + interview + offer; **Applied t
 
 ```yaml
 search:
-  terms: ["java developer", "spring boot developer"]
+  terms:
+    - "java developer"
+    - "spring boot developer"
+    # Mix in AI/LLM titles if you are targeting those roles.
+    - "AI Engineer"
+    - "Machine Learning Engineer"
+    - "LLM Engineer"
+    - "Python Developer"
   locations:
     - { location: "Delhi", remote: false }
     - { location: "India", remote: true }
   sites: ["naukri", "indeed"]   # add "linkedin" at your own risk; it rate-limits
 ```
 
-JobSpy supports several boards, but Naukri/Indeed are the most reliable for India. LinkedIn rate-limits quickly (HTTP 429).
+JobSpy supports several boards, but Naukri/Indeed are the most reliable for India. LinkedIn rate-limits quickly (HTTP 429). Each term is searched once per location, so keep the list focused if you hit rate limits.
 
 ### Scoring
 

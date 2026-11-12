@@ -34,6 +34,9 @@ candidate:
     - "Java Developer"
     - "Software Engineer"
     - "Spring Boot Developer"
+    # Add AI/ML titles if you are targeting those roles.
+    - "AI Engineer"
+    - "Machine Learning Engineer"
   locations_ok:
     - "Delhi"
     - "Gurgaon"
@@ -57,6 +60,11 @@ search:
     - "spring boot developer"
     - "java backend engineer"
     - "software engineer java microservices"
+    # AI/LLM roles. Remove these if you only want backend jobs.
+    - "AI Engineer"
+    - "Machine Learning Engineer"
+    - "LLM Engineer"
+    - "Python Developer"
   locations:
     - { location: "Delhi", remote: false }
     - { location: "Gurgaon", remote: false }
