@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Cover Letter - {{ resume.name }}</title>
+<style>
+  @page { size: A4; margin: 0; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: #fff; color: #17202a; }
+  body {
+    width: 210mm;
+    min-height: 297mm;
+    padding: 20mm 22mm;
+    font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    font-size: 10.8pt;
+    line-height: 1.55;
+  }
+  header { border-bottom: 1.5px solid #17202a; padding-bottom: 10px; margin-bottom: 22px; }
+  h1 { font-size: 21pt; margin: 0 0 3px; }
+  .headline { color: #34495e; font-size: 10.2pt; margin-bottom: 5px; }
+  .contact { font-size: 8.9pt; color: #4a5a6a; }
+  .contact .sep { padding: 0 5px; color: #9aa7b4; }
+  .meta { margin-bottom: 18px; color: #34495e; font-size: 10pt; }
+  .letter-body { white-space: pre-line; }
+  .role { font-weight: 700; }
+  @media print { body { padding: 20mm 22mm; } }
+</style>
+</head>
+<body>
+  <header>
+    <h1>{{ resume.name }}</h1>
+    {% if resume.headline %}<div class="headline">{{ resume.headline }}</div>{% endif %}
+    <div class="contact">
+      {% for part in contact_parts %}
+        <span>{{ display_link(part) if part.startswith('http') else part }}</span>
+        {% if not loop.last %}<span class="sep">|</span>{% endif %}
+      {% endfor %}
+    </div>
+  </header>
+  <div class="meta">{{ date_str }}</div>
+  <div class="letter-body">{{ body }}</div>
+</body>
+</html>

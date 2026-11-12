@@ -1,0 +1,14 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+config.yaml
+data/master_resume.yaml
+data/jobs.db
+data/jobs.db-journal
+data/jobs.db-wal
+data/master_resume.imported.yaml
+output/
+.browser/
+.pytest_cache/

@@ -1,0 +1,81 @@
+# ============================================================================
+# MASTER RESUME EXAMPLE - copy this file to data/master_resume.yaml and edit.
+# data/master_resume.yaml is gitignored so your real resume stays local.
+#
+# Rules the tailoring engine follows:
+#   - It can re-order, select and rephrase these bullets for a job.
+#   - It can NEVER invent employers, titles, dates, degrees, skills or metrics.
+#   - Skills must already exist somewhere in this file to appear in an output.
+# ============================================================================
+
+name: "Your Name"
+headline: "Backend Engineer | Java - Spring Boot - Microservices"
+email: "your.email@example.com"
+phone: "+91 90000 00000"
+location: "Your City, India"
+links:
+  linkedin: "https://linkedin.com/in/your-profile"
+  github: "https://github.com/your-username"
+  portfolio: ""
+
+summary: |
+  Backend engineer with 4+ years of experience designing and shipping
+  Java/Spring Boot services. Strong in REST APIs, relational and document
+  databases, and production debugging. Comfortable owning a feature from
+  schema design through deployment.
+
+skills:
+  - category: Languages
+    items: ["Java", "SQL", "Python", "JavaScript"]
+  - category: Frameworks
+    items: ["Spring Boot", "Spring MVC", "Spring Data JPA", "Hibernate", "REST APIs"]
+  - category: Data
+    items: ["PostgreSQL", "MongoDB", "Redis", "Kafka"]
+  - category: Cloud & DevOps
+    items: ["Docker", "AWS (EC2, S3, RDS)", "Git", "GitHub Actions", "Linux"]
+  - category: Practices
+    items: ["Microservices", "System design", "Unit testing", "JUnit", "Agile/Scrum"]
+
+experience:
+  - company: "Company One"
+    title: "Software Engineer"
+    location: "City, India"
+    start: "Jun 2022"
+    end: "Present"
+    bullets:
+      - "Built and maintained REST APIs in Java and Spring Boot for a customer-facing platform serving 50k+ monthly users."
+      - "Designed PostgreSQL schemas and indexes, cutting p95 read latency by ~35% on high-traffic endpoints."
+      - "Migrated a monolithic module to two microservices, reducing deploy time from 40 minutes to under 10."
+      - "Added JUnit and integration tests for core payment flows, raising coverage from 48% to 76%."
+      - "Worked with product and QA in an Agile team to scope, ship and monitor features end to end."
+
+  - company: "Company Two"
+    title: "Associate Software Engineer"
+    location: "City, India"
+    start: "Jul 2020"
+    end: "May 2022"
+    bullets:
+      - "Developed Spring Boot services and scheduled jobs for an internal logistics dashboard."
+      - "Optimized MongoDB aggregation queries and added Redis caching for frequently requested data."
+      - "Automated manual release checks with Python scripts, saving the team about 6 hours per release."
+      - "Fixed production issues across Java services, wrote root-cause notes and added regression tests."
+
+projects:
+  - name: "Example Project"
+    tech: "Python, FastAPI, SQLite"
+    bullets:
+      - "Built a local pipeline that discovers jobs, scores fit and tracks application status."
+      - "Added a human-in-the-loop browser autofill flow that never submits forms."
+  - name: "Another Example"
+    tech: "Java, Spring Boot, Kafka, PostgreSQL"
+    bullets:
+      - "Implemented an event-driven order pipeline with idempotent consumers and retry handling."
+
+education:
+  - degree: "B.Tech in Computer Science"
+    institution: "Your University"
+    year: "2020"
+    location: "City, India"
+
+certifications:
+  - "Example certification - replace or remove"

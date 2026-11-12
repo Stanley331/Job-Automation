@@ -1,0 +1,107 @@
+# ============================================================================
+# JobHunt example configuration.
+# Copy this file to config.yaml, then replace the placeholders with your data.
+# config.yaml is gitignored so your personal details stay local.
+# ============================================================================
+
+candidate:
+  # Used to prefill application forms. Keep these accurate.
+  full_name: "Your Name"
+  email: "your.email@example.com"
+  phone: "+91 90000 00000"
+  location: "Your City, India"
+  city: "Your City"
+  country: "India"
+  linkedin: "https://linkedin.com/in/your-profile"
+  github: "https://github.com/your-username"
+  portfolio: ""
+
+  years_experience: 4
+  current_title: "Software Engineer"
+  current_company: "Your Current Company"
+
+  # Answers used by the autofill form filler and the answer bank.
+  notice_period: "30 days"
+  expected_ctc: "18 LPA (negotiable)"
+  current_ctc: ""
+  work_authorization: "Yes - authorized to work in India"
+  willing_relocate: "Yes, within Delhi NCR"
+  availability: "30 days from offer"
+
+  # Scoring preferences
+  preferred_titles:
+    - "Backend Engineer"
+    - "Java Developer"
+    - "Software Engineer"
+    - "Spring Boot Developer"
+  locations_ok:
+    - "Delhi"
+    - "Gurgaon"
+    - "Noida"
+    - "Remote India"
+  min_salary_lpa: 12
+  avoid:
+    - "pure frontend"
+    - "QA / testing"
+    - "support"
+    - "sales"
+    - "8+ years"
+    - "intern / fresher"
+  profile_notes: |
+    Short summary of your background, strongest skills and what you are
+    looking for. This is sent to the scoring and tailoring prompts.
+
+search:
+  terms:
+    - "java developer"
+    - "spring boot developer"
+    - "java backend engineer"
+    - "software engineer java microservices"
+  locations:
+    - { location: "Delhi", remote: false }
+    - { location: "Gurgaon", remote: false }
+    - { location: "Noida", remote: false }
+    - { location: "India", remote: true }
+  sites: ["naukri", "indeed"]
+  results_per_search: 30
+  hours_old: 72
+  country_indeed: "India"
+  sleep_between_searches: 3
+
+scoring:
+  min_score_for_report: 60
+  max_per_run: 80
+  # Used by the offline keyword scorer and as a fallback if the LLM is down.
+  keyword_bonus: true
+
+llm:
+  # auto = Gemini if GEMINI_API_KEY is set, else OpenAI-compatible if
+  # OPENAI_API_KEY is set, else offline heuristics.
+  provider: "auto"
+  gemini_model: "gemini-2.5-flash"
+  openai_model: "gpt-4o-mini"
+  openai_base_url: "https://api.openai.com/v1"
+  temperature: 0.3
+  min_seconds_between_calls: 6
+  max_retries: 3
+
+output:
+  dir: "output"
+  report_path: "output/report.csv"
+  generate_cover_letter: true
+
+autofill:
+  browser_profile: ".browser/profile"
+  headless: false
+  click_apply: true
+  slow_mo_ms: 40
+  # Legal/consent checkboxes are deliberately left for you to tick.
+  auto_check_consent: false
+  # Demographic/EEO fields are never filled automatically.
+  answer_demographics: false
+
+dashboard:
+  host: "127.0.0.1"
+  port: 8765
+
+database: "data/jobs.db"

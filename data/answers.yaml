@@ -1,0 +1,131 @@
+# ============================================================================
+# CANONICAL SCREENING ANSWERS
+# The matcher uses the `patterns` list to recognise a question, then returns
+# the `answer`. Keep answers consistent across applications.
+#
+# You can use {{ candidate.notice_period }} style placeholders - they are
+# filled from config.yaml at runtime. Do not invent facts here.
+#
+# `needs_review: true` answers are still offered, but the dashboard flags them.
+# ============================================================================
+
+answers:
+  - patterns:
+      - "notice period"
+      - "how soon can you join"
+      - "joining time"
+      - "when can you start"
+      - "available to start"
+      - "availability to join"
+    question: "What is your notice period?"
+    answer: "{{ candidate.notice_period }}"
+    category: "logistics"
+
+  - patterns:
+      - "expected ctc"
+      - "expected salary"
+      - "salary expectation"
+      - "compensation expectation"
+      - "expected compensation"
+      - "desired salary"
+    question: "What are your salary expectations?"
+    answer: "{{ candidate.expected_ctc }}"
+    category: "compensation"
+
+  - patterns:
+      - "current ctc"
+      - "current salary"
+      - "present salary"
+    question: "What is your current CTC?"
+    answer: "{{ candidate.current_ctc }}"
+    category: "compensation"
+    needs_review: true
+
+  - patterns:
+      - "willing to relocate"
+      - "open to relocation"
+      - "relocation"
+      - "willing to move"
+    question: "Are you willing to relocate?"
+    answer: "{{ candidate.willing_relocate }}"
+    category: "logistics"
+
+  - patterns:
+      - "authorized to work"
+      - "authorised to work"
+      - "right to work"
+      - "work authorization"
+      - "work authorisation"
+      - "legally eligible to work"
+    question: "Are you authorized to work in this location?"
+    answer: "{{ candidate.work_authorization }}"
+    category: "authorization"
+
+  - patterns:
+      - "visa sponsorship"
+      - "require sponsorship"
+      - "need sponsorship"
+      - "sponsorship required"
+      - "require a visa"
+      - "need a visa"
+    question: "Do you require visa sponsorship?"
+    answer: "No"
+    category: "authorization"
+
+  - patterns:
+      - "years of experience"
+      - "how many years"
+      - "total experience"
+      - "years experience"
+    question: "How many years of experience do you have?"
+    answer: "{{ candidate.years_experience }} years"
+    category: "experience"
+
+  - patterns:
+      - "remote"
+      - "work from home"
+      - "hybrid"
+    question: "What is your preferred work arrangement?"
+    answer: "Open to hybrid or remote; based in {{ candidate.city }}."
+    category: "logistics"
+
+  - patterns:
+      - "why are you leaving"
+      - "reason for leaving"
+      - "why do you want to leave"
+    question: "Why are you looking for a new role?"
+    answer: "I am looking for a role with more ownership of backend systems and the chance to work on larger-scale distributed problems. I have enjoyed my current team and am leaving on good terms."
+    category: "motivation"
+    needs_review: true
+
+  - patterns:
+      - "why this company"
+      - "why do you want to work"
+      - "why are you interested in this role"
+      - "why this role"
+    question: "Why are you interested in this role?"
+    answer: ""
+    category: "motivation"
+    needs_review: true
+    # Left blank on purpose: the LLM drafts a company-specific answer during
+    # `prepare`, grounded in the job description and your resume.
+
+  - patterns:
+      - "current location"
+      - "where are you based"
+      - "current city"
+    question: "Where are you currently based?"
+    answer: "{{ candidate.location }}"
+    category: "logistics"
+
+  - patterns:
+      - "gender"
+      - "race"
+      - "ethnicity"
+      - "veteran"
+      - "disability"
+      - "date of birth"
+    question: "Demographic information"
+    answer: "Prefer not to say"
+    category: "demographic"
+    needs_review: true
